@@ -27,18 +27,18 @@ void callback(const sensor_msgs::LaserScan::ConstPtr& msg){
     double aux_scan_r;
     double aux_scan_l;
     for(int i = 0; i < 90; i++){
-        aux_scan_l = msg->ranges[90+i];
-        aux_scan_r = msg->ranges[180+i];
-        if(aux_scan_r <= 0.4 && aux_scan_r != 0.0){
+        aux_scan_r = msg->ranges[90+i];
+        aux_scan_l = msg->ranges[180+i];
+        if(aux_scan_r <= 0.6 && aux_scan_r != 0.0){
             r_scan.temperature -= 1;
         }
-        else if(aux_scan_r > 0.4 || isinf(aux_scan_r) || aux_scan_r == 0.0){
+        else if(aux_scan_r > 0.6 || isinf(aux_scan_r) || aux_scan_r == 0.0){
             r_scan.temperature+=1;
         }
-        if(aux_scan_l <= 0.4 && aux_scan_l != 0.0){
+        if(aux_scan_l <= 0.6 && aux_scan_l != 0.0){
             l_scan.temperature -= 1;
         }
-        else if(aux_scan_l > 0.4 || isinf(aux_scan_l) || aux_scan_l == 0.0){
+        else if(aux_scan_l > 0.6 || isinf(aux_scan_l) || aux_scan_l == 0.0){
             l_scan.temperature+=1;
         }
  

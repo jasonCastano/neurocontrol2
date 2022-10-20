@@ -153,6 +153,19 @@ int get_max(double v1, double v2, double v3){
     }
 }
 
+ros::Rate loop_rate(5);
+
+geometry_msgs::Twist cmd_vel_msg;
+
+void publish_cmd(){
+    
+    while(1){
+        pub_cmd.publish(cmd_vel_msg);
+        loop_rate.sleep();
+    }
+
+}
+
 void calculation_thread(){
     
     while(1){
@@ -263,7 +276,6 @@ void calculation_thread(){
     exp_msg.data = (Ac[0][0])/1.12/800.0;
     huir_msg.data = (Ac[1][0])/1.12/800.0;
     
-    geometry_msgs::Twist cmd_vel_msg;
     
     //cmd_vel_msg.linear.x = (r/2.0)*(exp_msg.data + huir_msg.data);
     
@@ -284,7 +296,7 @@ void calculation_thread(){
     cmd_vel_msg.angular.y = 0;
     //cmd_vel_msg.angular.z = (r/(2.0*l))*(exp_msg.data - huir_msg.data);
     
-    pub_cmd.publish(cmd_vel_msg);
+    //pub_cmd.publish(cmd_vel_msg);
     
     z[0][0] = z [0][1];  
     z[1][0] = z [1][1];
@@ -399,6 +411,8 @@ int main(int argc, char **argv){
     sync.registerCallback(boost::bind(&callback, _1, _2, _3));
     
     std::thread (calculation_thread).detach();
+    
+    std::thread (publish_cmd).detach();
 
     ros::spin();
 
